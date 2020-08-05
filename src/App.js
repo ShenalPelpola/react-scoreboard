@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Header from "./component/Header";
-import Player from "./component/Player";
-import AddPlayerForm from "./component/AddPlayerForm";
+import Header from "./Components/Header";
+import Player from "./Components/Player";
+import AddPlayerForm from "./Components/AddPlayerForm";
 
 class App extends Component {
   constructor() {
@@ -12,24 +12,28 @@ class App extends Component {
     this.state = {
       players: [
         {
-          playerName: "Guil",
+          playerName: "player 1",
           score: 0,
           id: 1,
+          highest: false,
         },
         {
-          playerName: "Treasure",
+          playerName: "player 2",
           score: 0,
           id: 2,
+          highest: false,
         },
         {
-          playerName: "Ashley",
+          playerName: "player 3",
           score: 0,
           id: 3,
+          highest: false,
         },
         {
-          playerName: "James",
+          playerName: "player 4",
           score: 0,
           id: 4,
+          highest: false,
         },
       ],
     };
@@ -47,16 +51,23 @@ class App extends Component {
   };
 
   handleAddPlayer = (name) => {
-    this.setState({
-      players: [
-        ...this.state.players,
-        {
-          playerName: name,
-          score: 0,
-          id: (this.prevPlayerID += 1),
-        },
-      ],
-    });
+    let newPlayer = {
+      playerName: name,
+      score: 0,
+      id: (this.prevPlayerId += 1),
+    };
+    this.setState((prevState) => ({
+      players: prevState.players.concat(newPlayer),
+    }));
+  };
+
+  getHighScore = () => {
+    const scores = this.state.players.map((p) => p.score);
+    const highScore = Math.max(...scores);
+    if (highScore) {
+      return highScore;
+    }
+    return null;
   };
 
   handleRemovePlayer = (id) => {
@@ -67,9 +78,9 @@ class App extends Component {
 
   //render method
   render() {
+    const highScore = this.getHighScore();
     return (
       <div className="App scoreboard">
-        <h1 className="display-5 mb-4 mt-4 headTitle">ScoreBoard</h1>
         {/* <ScoreBoard></ScoreBoard> */}
         {/* if number use {}  */}
         <Header title="Scoreboard" players={this.state.players} />
@@ -82,6 +93,7 @@ class App extends Component {
             score={player.score}
             removePlayer={this.handleRemovePlayer}
             changeScore={this.handleScoreChange}
+            isHighScore={highScore === player.score}
           />
         ))}
         <AddPlayerForm addPlayer={this.handleAddPlayer} />

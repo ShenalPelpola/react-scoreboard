@@ -1,7 +1,8 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const Counter = (props) => {
-  let index = props.index;
+  const { index, score, changeScore } = props;
   // use arrow functions when creating stateless functions in a class
   // because in a method this does'nt refer to the class itself
   // increamentScore = () => {
@@ -18,21 +19,27 @@ const Counter = (props) => {
     <div className="counter">
       <button
         className="counter-action decrement"
-        onClick={() => props.changeScore(index, -1)}
+        onClick={() => changeScore(index, -1)}
       >
         {" "}
         -{" "}
       </button>
-      <span className="counter-score">{props.score}</span>
+      <span className="counter-score">{score}</span>
       <button
         className="counter-action increment"
-        onClick={() => props.changeScore(index, 1)}
+        onClick={() => changeScore(index, 1)}
       >
         {" "}
         +{" "}
       </button>
     </div>
   );
+};
+
+Counter.propTypes = {
+  index: PropTypes.number,
+  score: PropTypes.number,
+  changeScore: PropTypes.func,
 };
 
 export default Counter;
